@@ -1,0 +1,102 @@
+<div class="dashboard-wrapper">
+  <header class="dashboard-header">
+    <div class="logo">SinalMundo <span>| Monitoramento de Redes</span></div>
+    
+    <div class="status-indicator">
+      @if (state.loading()) {
+        <span class="loading spinner"></span> Atualizando...
+      } @else {
+        <div class="status-badge" [class.danger]="state.degradedRegions().length > 0">
+          @if (state.degradedRegions().length > 0) {
+            ⚠️ {{ state.degradedRegions().length }} Regiões com Anomalias
+          } @else {
+            ✅ Rede Operacional
+          }
+        </div>
+      }
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+    <section class="panel map-panel">
+      <h2>Mapa de Conectividade</h2>
+      <svg viewBox="0 0 1000 1000" class="brazil-map">
+        @for (region of state.regions(); track region.id) {
+          <g [class]="'region ' + region.status.toLowerCase()" (click)="selectRegion(region)">
+             <circle [attr.cx]="getRegionX(region.name)"
+                     [attr.cy]="getRegionY(region.name)"
+                     r="60"/>
+             <text [attr.x]="getRegionX(region.name)"
+                   [attr.y]="getRegionY(region.name) + 85"
+                   text-anchor="middle"
+                   class="region-label">
+               {{ region.name }}
+             </text>
+             
+             @if(region.censorshipActive) {
+                <rect [attr.x]="getRegionX(region.name) - 15"
+                      [attr.y]="getRegionY(region.name) - 15"
+                      width="30" height="30" fill="var(--danger)" 
+                      class="censorship-alert-icon"/>
+                <text [attr.x]="getRegionX(region.name)"
+                      [attr.y]="getRegionY(region.name) + 5"
+                      fill="white" font-size="20" font-weight="bold" text-anchor="middle">
+                   ✖
+                </text>
+             }
+          </g>
+        }
+      </svg>
+    </section>
+
+    <!-- Side Panels -->
+    <aside class="side-panels">
+      <div class="panel drops">
+        <h3>Taxa de Queda (Drops)</h3>
+        <ul class="drop-list">
+          @for (region of state.regions(); track region.id) {
+            <li>
+              <div class="drop-header">
+                <span>{{ region.name }}</span>
+                <span class="rate" [class.critical]="region.dropRate > 20">{{ region.dropRate }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="fill" [style.width.%]="region.dropRate" [class.high]="region.dropRate > 20"></div>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="panel censorship">
+        <h3>Alerta de Censura</h3>
+        <ul class="alert-list">
+          @for (region of state.regions(); track region.id) {
+            @if (region.censorshipActive) {
+              <li class="alert">
+                <span class="icon">🚨</span> 
+                Bloqueios ativos detectados na região <strong>{{ region.name }}</strong>
+              </li>
+            }
+          }
+        </ul>
+      </div>
+
+      <div class="panel event-log">
+        <h3>Registro de Eventos</h3>
+        <ul class="log-list">
+          @for (event of state.events(); track event.id) {
+            <li [class]="'event-type-' + event.type.toLowerCase()">
+              <time>{{ event.timestamp | date:'HH:mm:ss' }}</time>
+              <div class="details">
+                <strong>{{ event.region }}</strong>: {{ event.message }}
+              </div>
+            </li>
+          } @empty {
+            <li class="empty-state">Sem eventos recentes registrados</li>
+          }
+        </ul>
+      </div>
+    </aside>
+  </main>
+</div>

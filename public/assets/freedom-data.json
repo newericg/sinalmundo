@@ -1,0 +1,13 @@
+[
+  { "code": "CN", "score": 9,  "status": "Not Free" },
+  { "code": "RU", "score": 21, "status": "Not Free" },
+  { "code": "IR", "score": 16, "status": "Not Free" },
+  { "code": "KP", "score": 3,  "status": "Not Free" },
+  { "code": "DE", "score": 79, "status": "Free" },
+  { "code": "BR", "score": 64, "status": "Free" },
+  { "code": "US", "score": 72, "status": "Free" },
+  { "code": "GB", "score": 79, "status": "Free" },
+  { "code": "MM", "score": 9, "status": "Not Free" },
+  { "code": "TR", "score": 30, "status": "Not Free" },
+  { "code": "SA", "score": 7, "status": "Not Free" }
+]
