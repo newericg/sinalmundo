@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { topSpeedCountries } from '../../../core/state/app.state';
+import { topSpeedCountries, activeFullModal } from '../../../core/state/app.state';
 
 @Component({
   selector: 'app-speed-ranking',
@@ -8,7 +8,10 @@ import { topSpeedCountries } from '../../../core/state/app.state';
   imports: [CommonModule],
   template: `
     <div>
-      <h4 class="font-mono text-[10px] text-outline tracking-widest uppercase mb-4">TOP VELOCIDADES</h4>
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="font-mono text-[10px] text-outline tracking-widest uppercase">TOP VELOCIDADES</h4>
+        <button (click)="openModal()" class="text-[10px] font-mono text-outline hover:text-white transition-colors cursor-pointer border border-white/10 px-2 py-0.5 rounded flex items-center gap-1">VER MAIS</button>
+      </div>
       <div class="space-y-4">
         @for (c of topList() | slice:0:4; track c.code; let i = $index) {
           <div class="group cursor-default">
@@ -30,4 +33,8 @@ import { topSpeedCountries } from '../../../core/state/app.state';
 })
 export class SpeedRankingComponent {
   topList = topSpeedCountries;
+  
+  openModal() {
+    activeFullModal.set('speed');
+  }
 }

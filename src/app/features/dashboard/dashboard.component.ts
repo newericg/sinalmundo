@@ -10,8 +10,9 @@ import { SpeedRankingComponent } from '../panels/speed-ranking/speed-ranking.com
 import { SparklineChartComponent } from '../panels/sparkline-chart/sparkline-chart.component';
 import { EventLogComponent } from '../panels/event-log/event-log.component';
 import { CountryDetailModalComponent } from '../panels/country-detail-modal/country-detail-modal.component';
+import { FullListModalComponent } from '../panels/full-list-modal/full-list-modal.component';
 import { InternetStatusService } from '../../core/services/internet-status.service';
-import { mapMode, isLoading, showCables, eventLog, countriesState } from '../../core/state/app.state';
+import { mapMode, isLoading, showCables, eventLog, countriesState, activeFullModal } from '../../core/state/app.state';
 import { MapMode } from '../../core/models';
 
 @Component({
@@ -21,7 +22,7 @@ import { MapMode } from '../../core/models';
     CommonModule, DatePipe,
     TickerComponent, WorldMapComponent, StatsPanelComponent,
     OutageListComponent, CensorshipListComponent, SpeedRankingComponent,
-    SparklineChartComponent, EventLogComponent, CountryDetailModalComponent
+    SparklineChartComponent, EventLogComponent, CountryDetailModalComponent, FullListModalComponent
   ],
   template: `
     <!-- TopNavBar -->
@@ -141,6 +142,9 @@ import { MapMode } from '../../core/models';
       @if (selectedModalCountry()) {
         <app-country-detail-modal [countryCode]="selectedModalCountry()!" (close)="selectedModalCountry.set(null)" />
       }
+      @if (activeFullModal()) {
+        <app-full-list-modal />
+      }
     </main>
     <app-ticker></app-ticker>
   `,
@@ -162,6 +166,7 @@ export class DashboardComponent implements OnInit {
   soundEnabled = signal<boolean>(false);
   showSearch = signal<boolean>(false);
   
+  activeFullModal = activeFullModal;
   selectedModalCountry = signal<string | null>(null);
 
   constructor() {

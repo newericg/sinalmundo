@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { eventLog } from '../../../core/state/app.state';
+import { eventLog, activeFullModal } from '../../../core/state/app.state';
 
 @Component({
   selector: 'app-event-log',
@@ -8,7 +8,10 @@ import { eventLog } from '../../../core/state/app.state';
   imports: [CommonModule, DatePipe],
   template: `
     <div>
-      <h4 class="font-mono text-[10px] text-outline tracking-widest uppercase mb-4">LOG DE EVENTOS</h4>
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="font-mono text-[10px] text-outline tracking-widest uppercase">LOG DE EVENTOS</h4>
+        <button (click)="openModal()" class="text-[10px] font-mono text-outline hover:text-white transition-colors cursor-pointer border border-white/10 px-2 py-0.5 rounded flex items-center gap-1">VER MAIS</button>
+      </div>
       <div class="space-y-3">
         @for (e of logs(); track e.id) {
           <div class="flex gap-3 items-start border-l border-white/5 pl-3 relative transition-all">
@@ -30,4 +33,8 @@ import { eventLog } from '../../../core/state/app.state';
 })
 export class EventLogComponent {
   logs = eventLog;
+
+  openModal() {
+    activeFullModal.set('logs');
+  }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { censoredCountries } from '../../../core/state/app.state';
+import { censoredCountries, activeFullModal } from '../../../core/state/app.state';
 
 @Component({
   selector: 'app-censorship-list',
@@ -8,11 +8,14 @@ import { censoredCountries } from '../../../core/state/app.state';
   imports: [CommonModule],
   template: `
     <div>
-      <h4 class="font-mono text-[10px] text-outline tracking-widest uppercase mb-3 flex items-center gap-2">
-        <span class="w-1 h-1 bg-secondary rounded-full"></span> CENSURA E RESTRIÇÕES
-      </h4>
+      <div class="flex items-center justify-between mb-3 border-b border-secondary/10 pb-2">
+        <h4 class="font-mono text-[10px] text-outline tracking-widest uppercase flex items-center gap-2 text-secondary">
+          <span class="material-symbols-outlined text-[14px]">visibility_off</span> CENSURA E RESTRIÇÕES
+        </h4>
+        <button (click)="openModal()" class="text-[10px] font-mono text-outline hover:text-white transition-colors cursor-pointer border border-white/10 px-2 py-0.5 rounded flex items-center gap-1">VER MAIS</button>
+      </div>
       <div class="space-y-3">
-        @for (c of censoredList(); track c.code) {
+        @for (c of censoredList() | slice:0:5; track c.code) {
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <img [src]="'https://flagcdn.com/w20/' + (c.code | lowercase) + '.png'" class="w-4 h-3 rounded-[1px] object-cover shadow-sm" alt="flag">
@@ -20,7 +23,7 @@ import { censoredCountries } from '../../../core/state/app.state';
             </div>
             <div class="flex gap-0.5">
               @for (bar of [1, 2, 3, 4, 5]; track bar) {
-                <div class="w-1 h-3" [ngClass]="bar <= c.censorship ? 'bg-secondary' : 'bg-secondary/30'"></div>
+                <div class="w-1 h-3" [ngClass]="bar <= c.censorship ? 'bg-secondary' : 'bg-surface-container-highest'"></div>
               }
             </div>
           </div>
@@ -33,4 +36,8 @@ import { censoredCountries } from '../../../core/state/app.state';
 })
 export class CensorshipListComponent {
   censoredList = censoredCountries;
+  
+  openModal() {
+    activeFullModal.set('censorship');
+  }
 }

@@ -5,6 +5,7 @@ export const countriesState   = signal<CountryStatus[]>([]);
 export const mapMode          = signal<MapMode>('outages');
 export const showCables       = signal<boolean>(true);
 export const selectedCountry  = signal<CountryStatus | null>(null);
+export const activeFullModal  = signal<'speed' | 'outages' | 'censorship' | 'logs' | null>(null);
 export const eventLog         = signal<EventLog[]>([]);
 export const isLoading        = signal<boolean>(true);
 
